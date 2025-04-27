@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Job{% endblock %}
+
+{% block content %}
+<div class="create-job" style="max-width: 800px; margin: 0 auto; padding: 20px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+    <div class="title" style="display: flex; align-items: center; margin-bottom: 20px;">
+        <i class="uil uil-briefcase" style="font-size: 24px; margin-right: 10px; color: var(--primary-color);"></i>
+        <span class="text" style="font-size: 24px; font-weight: bold; color: var(--text-color);">Edit Job</span>
+    </div>
+    <form action="{{ url_for('main.edit_job', job_id=job.id) }}" method="post" style="display: flex; flex-direction: column; gap: 15px;">
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+            <label for="job-title" style="font-size: 16px; font-weight: bold; color: var(--text-color);">Job Title</label>
+            <input type="text" id="job-title" name="title" value="{{ job.title }}" placeholder="Enter job title" required style="padding: 10px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.1); color: var(--text-color); font-size: 16px;">
+        </div>
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+            <label for="job-description" style="font-size: 16px; font-weight: bold; color: var(--text-color);">Job Description</label>
+            <textarea id="job-description" name="description" placeholder="Enter job description" required style="padding: 10px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.1); color: var(--text-color); font-size: 16px; resize: vertical; min-height: 100px;">{{ job.description }}</textarea>
+        </div>
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+            <label for="job-location" style="font-size: 16px; font-weight: bold; color: var(--text-color);">Location</label>
+            <input type="text" id="job-location" name="location" value="{{ job.location }}" placeholder="Enter job location" required style="padding: 10px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.1); color: var(--text-color); font-size: 16px;">
+        </div>
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+            <label for="job-salary" style="font-size: 16px; font-weight: bold; color: var(--text-color);">Salary</label>
+            <input type="number" id="job-salary" name="salary" value="{{ job.salary }}" placeholder="Enter job salary" required style="padding: 10px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.1); color: var(--text-color); font-size: 16px;">
+        </div>
+        <button type="submit" style="padding: 10px 20px; background: linear-gradient(135deg, #667eea, #764ba2); border: none; border-radius: 5px; color: #fff; font-size: 16px; cursor: pointer; transition: background 0.3s ease;">
+            Update Job
+        </button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% block title %}View Candidates{% endblock %}
+
+{% block content %}
+<style>
+    /* Base Styles */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+    }
+
+    /* Page Header */
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 30px;
+        background: #f1f1f1;
+        padding: 20px 40px;
+        border-radius: 12px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .page-header .icon {
+        font-size: 28px;
+        color: #ffaf00;
+        margin-right: 12px;
+    }
+
+    .page-header .page-title {
+        font-size: 32px;
+        color: #333;
+        margin: 0;
+    }
+
+    /* Candidate Table */
+    .candidates-wrapper {
+        width: 90%;
+        margin: auto;
+        overflow-x: auto;
+    }
+
+    .candidates-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 40px;
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .candidates-table th,
+    .candidates-table td {
+        padding: 16px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .candidates-table th {
+        background-color: #ffaf00;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .candidates-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .candidates-table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Buttons */
+    .view-interview-button,
+    .view-resume-button {
+        display: inline-block;
+        color: #fff;
+        background-color: #ffaf00;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .view-interview-button:hover,
+    .view-resume-button:hover {
+        background-color: #e59400;
+    }
+
+    iframe {
+        width: 100%;
+        height: 500px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    /* Dark Mode */
+    body.dark .page-header {
+        background-color: #444;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+
+    body.dark .page-header .page-title {
+        color: #eee;
+    }
+
+    body.dark .candidates-table th {
+        background-color: #555;
+    }
+
+    body.dark .candidates-table td {
+        color: #ccc;
+    }
+</style>
+
+<div class="candidates-wrapper">
+    <div class="page-header">
+        <i class="uil uil-users icon"></i>
+        <h1 class="page-title">Candidates for Job</h1>
+    </div>
+
+    <table class="candidates-table">
+        <thead>
+            <tr>
+                <th>Candidate Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for candidate in candidates %}
+            <tr>
+                <td>{{ candidate.name }}</td>
+                <td>{{ candidate.email }}</td>
+                <td>{{ candidate.phone }}</td>
+                <td>
+                    <a href="{{ url_for('main.view_interview', application_id=candidate.application_id) }}" class="view-interview-button">View Interview</a>
+
+                    {% if candidate.resume_filename %}
+                        <button onclick="toggleResume('resume-iframe-{{ candidate.application_id }}')" class="view-resume-button">
+                            View Resume
+                        </button>
+                    {% else %}
+                        <span style="color: #888;">No Resume</span>
+                    {% endif %}
+                </td>
+            </tr>
+
+            {% if candidate.resume_filename %}
+            <tr id="resume-iframe-{{ candidate.application_id }}" style="display: none;">
+                <td colspan="4">
+                    <iframe src="{{ url_for('static', filename='uploads/cv/' ~ candidate.resume_filename) }}"></iframe>
+                    <br>
+                    <a href="{{ url_for('static', filename='uploads/cv/' ~ candidate.resume_filename) }}" download class="view-resume-button">
+                        Download Resume
+                    </a>
+                </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function toggleResume(id) {
+        const elem = document.getElementById(id);
+        if (!elem) return;
+
+        // Close all other resume iframes (optional)
+        const allResumeRows = document.querySelectorAll("[id^='resume-iframe-']");
+        allResumeRows.forEach(row => {
+            if (row.id !== id) row.style.display = "none";
+        });
+
+        // Toggle display
+        elem.style.display = (elem.style.display === "none" || elem.style.display === "") ? "table-row" : "none";
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}View Applications{% endblock %}
+
+{% block content %}
+<style>
+    /* General Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Gradient background */
+        color: #fff;
+        line-height: 1.6;
+        padding: 20px;
+    }
+
+    /* Page Header */
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+        backdrop-filter: blur(10px); /* Glassmorphism effect */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .page-header .icon {
+        font-size: 24px;
+        color: #ffaf00; /* Accent color */
+        margin-right: 10px;
+    }
+
+    .page-header .page-title {
+        font-size: 28px;
+        color: #fff; /* White text for better contrast */
+        margin: 0;
+    }
+
+    /* Table Styles */
+    .applications-wrapper {
+        text-align: center; /* Center-align table and button */
+    }
+
+    .applications-table {
+        width: 80%; /* Center table and adjust width */
+        margin: 0 auto; /* Center table horizontally */
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+        backdrop-filter: blur(10px); /* Glassmorphism effect */
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .applications-table th,
+    .applications-table td {
+        padding: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2); /* Semi-transparent border */
+        text-align: left;
+        color: #fff; /* White text for better contrast */
+    }
+
+    .applications-table th {
+        background-color: rgba(255, 175, 0, 0.8); /* Header background with transparency */
+        color: #fff; /* Text color */
+    }
+
+    .applications-table tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.05); /* Semi-transparent even rows */
+    }
+
+    .applications-table tr:hover {
+        background-color: rgba(255, 255, 255, 0.1); /* Hover effect */
+    }
+
+    .view-details-button {
+        display: inline-block; /* Ensure button is inline-block for centering */
+        color: #fff; /* Button text color */
+        background-color: #ffaf00; /* Button background color */
+        text-decoration: none;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 5px;
+        text-align: center; /* Center text within button */
+        transition: background-color 0.3s ease; /* Smooth hover effect */
+    }
+
+    .view-details-button:hover {
+        background-color: #e59400; /* Darker orange for hover effect */
+    }
+
+    /* Dark Mode */
+    body.dark .page-header {
+        background: rgba(0, 0, 0, 0.2); /* Darker semi-transparent background */
+    }
+
+    body.dark .applications-table {
+        background: rgba(0, 0, 0, 0.2); /* Darker semi-transparent background */
+    }
+
+    body.dark .applications-table th {
+        background-color: rgba(255, 175, 0, 0.8); /* Header background with transparency */
+    }
+
+    body.dark .applications-table td {
+        border: 1px solid rgba(255, 255, 255, 0.1); /* Darker border */
+    }
+
+    body.dark .applications-table tr:nth-child(even) {
+        background-color: rgba(0, 0, 0, 0.1); /* Darker even rows */
+    }
+
+    body.dark .applications-table tr:hover {
+        background-color: rgba(0, 0, 0, 0.2); /* Hover effect for dark mode */
+    }
+</style>
+
+<div class="applications-wrapper">
+    <div class="page-header">
+        <i class="uil uil-list icon"></i>
+        <h1 class="page-title">My Applications</h1>
+    </div>
+    <table class="applications-table">
+        <thead>
+            <tr>
+                <th>Job Title</th>
+                <th>Application Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for application in applications %}
+            <tr>
+                <td>{{ application.job_title }}</td>
+                <td>{{ application.application_date }}</td>
+                <td>{{ application.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

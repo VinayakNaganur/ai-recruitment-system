@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> -->
+    <title>{% block title %}Home{% endblock %}</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        /* Navigation Bar */
+        nav {
+            width: 250px;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-image img {
+            width: 100%;
+            border-radius: 50%;
+        }
+
+        .menu-items ul {
+            list-style: none;
+        }
+
+        .menu-items ul li a {
+            text-decoration: none;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .menu-items ul li a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .menu-items ul li a i {
+            margin-right: 10px;
+        }
+
+        /* Dashboard Section */
+        .dashboard {
+            margin-left: 270px;
+            padding: 20px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .top img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .dash-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-left: 270px;
+            padding: 15px 0;
+            color: #ccc;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dark Mode Toggle */
+        .mode-toggle {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .mode-toggle .switch {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .mode-toggle .switch:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .switch {
+            background-color: #2196F3;
+        }
+
+        input:checked + .switch:before {
+            transform: translateX(26px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .dashboard {
+                margin-left: 0;
+            }
+
+            footer {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo-name">
+            <div class="logo-image">
+                <img src="{{ url_for('static', filename='Images/logo.png') }}" alt="Logo">
+            </div>
+        </div>
+        <div class="menu-items">
+            <ul class="nav-links">
+                <li><a href="{{ url_for('main.home') }}">
+                    <i class="uil uil-estate"></i>
+                    <span class="link-name">Home</span>
+                </a></li>
+
+                <li><a href="{{ url_for('main.dashboard') }}">
+                    <i class="uil uil-chart-pie"></i>
+                    <span class="link-name">Dashboard</span>
+                </a></li>
+
+                <li><a href="{{ url_for('main.view_applications') }}">
+                    <i class="uil uil-list-ul"></i>
+                    <span class="link-name">My Applications</span>
+                </a></li>
+                <li><a href="{{ url_for('main.my_jobs') }}">
+                    <i class="uil uil-briefcase"></i>
+                    <span class="link-name">My Jobs</span>
+                </a></li>
+                <li><a href="{{ url_for('main.settings') }}">
+                    <i class="uil uil-setting"></i>
+                    <span class="link-name">Settings</span>
+                </a></li>
+            </ul>
+            <ul class="logout-mode">
+                <li><a href="{{ url_for('main.logout') }}">
+                    <i class="uil uil-signout"></i>
+                    <span class="link-name">Logout</span>
+                </a></li>
+                <li class="mode">
+                    <!-- <div class="mode-toggle">
+                        <span class="switch"></span>
+                    </div> -->
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+            <a href="{{ url_for('main.settings') }}">
+                <img src="{{ url_for('static', filename='Images/default-profile.png') }}" alt="Default Profile Photo">
+            </a>
+        </div>
+        <div class="dash-content">
+            {% block content %}{% endblock %}
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        &copy; 2025 RECRUIT AI. All rights reserved.
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.querySelector('.sidebar-toggle');
+            const nav = document.querySelector('nav');
+
+            sidebarToggle.addEventListener('click', function() {
+                nav.classList.toggle('active');
+            });
+
+            const modeToggle = document.querySelector('.mode-toggle .switch');
+            const body = document.body;
+
+            modeToggle.addEventListener('click', function() {
+                body.classList.toggle('dark-mode');
+            });
+        });
+    </script>
+</body>
+</html>

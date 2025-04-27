@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Job{% endblock %}
+
+{% block content %}
+<div class="create-job" style="max-width: 800px; margin: 0 auto; padding: 20px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+    <div class="title" style="display: flex; align-items: center; margin-bottom: 20px;">
+        <i class="uil uil-briefcase" style="font-size: 24px; margin-right: 10px;"></i>
+        <span class="text" style="font-size: 24px; font-weight: bold;">Create Job</span>
+    </div>
+    <form action="{{ url_for('main.create_job') }}" method="post" style="display: flex; flex-direction: column; gap: 15px;">
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+            <label for="job-title" style="font-size: 16px; font-weight: bold;">Job Title</label>
+            <input type="text" id="job-title" name="title" placeholder="Enter job title" required style="padding: 10px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.1); color: #fff; font-size: 16px;">
+        </div>
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+            <label for="job-description" style="font-size: 16px; font-weight: bold;">Job Description</label>
+            <textarea id="job-description" name="description" placeholder="Enter job description" required style="padding: 10px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.1); color: #fff; font-size: 16px; resize: vertical; min-height: 100px;"></textarea>
+        </div>
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+            <label for="job-location" style="font-size: 16px; font-weight: bold;">Location</label>
+            <select id="job-location" name="location" required style="padding: 10px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.1); color: #fff; font-size: 16px;">
+                <option value="" disabled selected>Select job location</option>
+            </select>
+        </div>
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+            <label for="job-salary" style="font-size: 16px; font-weight: bold;">Salary</label>
+            <input type="number" id="job-salary" name="salary" placeholder="Enter job salary" required step="0.01" style="padding: 10px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.1); color: #fff; font-size: 16px;">
+        </div>
+        <button type="submit" style="padding: 10px 20px; background: linear-gradient(135deg, #667eea, #764ba2); border: none; border-radius: 5px; color: #fff; font-size: 16px; cursor: pointer; transition: background 0.3s ease;">
+            Create Job
+        </button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const locationSelect = document.getElementById('job-location');
+
+        fetch('https://restcountries.com/v3.1/all')
+            .then(response => response.json())
+            .then(data => {
+                // Sort countries alphabetically
+                data.sort((a, b) => a.name.common.localeCompare(b.name.common));
+
+                data.forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country.name.common;
+                    option.textContent = country.name.common;
+                    locationSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching country data:', error));
+    });
+</script>
+{% endblock %}

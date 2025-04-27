@@ -1,0 +1,318 @@
+{% extends 'base.html' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        line-height: 1.6;
+        padding: 20px;
+    }
+
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .page-header .icon {
+        font-size: 24px;
+        color: #ffd700;
+        margin-right: 10px;
+    }
+
+    .page-header .page-title {
+        font-size: 28px;
+        color: #fff;
+        margin: 0;
+    }
+
+    .settings-container {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .settings-section {
+        flex: 1;
+        padding: 20px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        min-width: 300px;
+        color: #fff;
+    }
+
+    .general-info-bar {
+        flex: 40%;
+    }
+
+    .cv-bar {
+        flex: 60%;
+    }
+
+    .profile-and-info {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .profile-photo-container {
+        flex: 0 0 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .profile-photo {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #ffd700;
+    }
+
+    .info-form {
+        flex: 1;
+    }
+
+    .settings-section form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .settings-section .form-group {
+        margin-bottom: 15px;
+    }
+
+    .settings-section .form-group label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 5px;
+        color: #ffd700;
+    }
+
+    .settings-section .form-group input,
+    .settings-section .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #333;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .settings-section .form-group input:focus,
+    .settings-section .form-group textarea:focus {
+        border-color: #ffd700;
+        box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+        outline: none;
+    }
+
+    .settings-section .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .settings-section button {
+        background: linear-gradient(135deg, #ffd700, #ffb700);
+        color: #333;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .settings-section button:hover {
+        background: linear-gradient(135deg, #ffb700, #e6a300);
+        transform: translateY(-2px);
+    }
+
+    .cv-display {
+        margin-top: 20px;
+    }
+
+    .cv-display h3 {
+        font-size: 18px;
+        color: #ffd700;
+        margin-bottom: 10px;
+    }
+
+    .cv-display embed {
+        width: 100%;
+        height: 600px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    #notification {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(40, 167, 69, 0.9);
+        color: #fff;
+        padding: 20px 30px;
+        border: 1px solid #28a745;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        z-index: 9999;
+        text-align: center;
+    }
+
+    #notification p {
+        margin: 0 0 15px;
+    }
+
+    #notification button {
+        background-color: #ffd700;
+        color: #333;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #notification button:hover {
+        background-color: #e6c200;
+    }
+
+    @media (max-width: 768px) {
+        .settings-container {
+            flex-direction: column;
+        }
+
+        .settings-section {
+            min-width: 100%;
+        }
+
+        .profile-and-info {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-photo-container {
+            flex: none;
+        }
+
+        .info-form {
+            width: 100%;
+        }
+
+        .cv-display embed {
+            height: 400px;
+        }
+    }
+</style>
+
+<div class="page-header">
+    <i class="uil uil-settings icon"></i>
+    <h1 class="page-title">Account Settings</h1>
+</div>
+
+<div class="settings-container">
+    <!-- General Settings Section -->
+    <div class="settings-section general-info-bar">
+        <h2>General Info</h2>
+
+        <div class="profile-and-info">
+            <!-- Profile Photo Section -->
+            <div class="profile-photo-container">
+                {% if user.profile_photo %}
+                <img src="{{ url_for('static', filename='uploads/photos/' ~ user.profile_photo) }}" alt="Profile Photo" class="profile-photo">
+                {% else %}
+                <p>No Profile Photo</p>
+                {% endif %}
+            </div>
+
+            <!-- General Info Form -->
+            <form action="{{ url_for('main.settings') }}" method="post" enctype="multipart/form-data" class="info-form">
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="company_name">Company Name</label>
+                    <input type="text" id="company_name" name="company_name" value="{{ user.company_name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone_number">Phone Number</label>
+                    <input type="text" id="phone_number" name="phone_number" value="{{ user.phone_number }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="birthday">Birthday</label>
+                    <input type="date" id="birthday" name="birthday" value="{{ user.birthday }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="profile_photo">Upload Profile Photo</label>
+                    <input type="file" id="profile_photo" name="profile_photo">
+                </div>
+
+                <!-- Notification Box -->
+                <div id="notification">
+                    <p>✅ Changes made successfully!<br>Now go to the home page.</p>
+                    <button type="button" onclick="hideNotification()">OK</button>
+                </div>
+
+                <!-- Save Changes Button -->
+                <button type="button" name="save_changes" onclick="showNotification()">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- CV Section -->
+    <div class="settings-section cv-bar">
+        <h2>CV</h2>
+        <form action="{{ url_for('main.settings') }}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="cv_file">Upload CV (PDF only)</label>
+                <input type="file" id="cv_file" name="cv_file">
+            </div>
+            <button type="submit" name="upload_cv">Upload CV</button>
+        </form>
+
+        {% if user.cv_file %}
+        <div class="cv-display">
+            <h3>Current CV:</h3>
+            <embed src="{{ url_for('static', filename='uploads/cv/' ~ user.cv_file) }}" type="application/pdf" width="100%" height="600px" />
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    function showNotification() {
+        const notification = document.getElementById('notification');
+        notification.style.display = 'block';
+
+        setTimeout(() => {
+            hideNotification();
+        }, 5000);
+    }
+
+    function hideNotification() {
+        document.getElementById('notification').style.display = 'none';
+    }
+</script>
+{% endblock %}
